@@ -1,0 +1,262 @@
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    <!-- see http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-tip-dont-forget-the-viewport-meta-tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <style>
+        /* following two viewport lines are equivalent to the meta viewport statement above, needed for Windows */
+        /* see http://www.quirksmode.org/blog/archives/2014/05/html5_dev_conf.html and http://dev.w3.org/csswg/css-device-adapt/ */
+        @-ms-viewport { width: 100vw ; zoom: 100% ; }  @viewport { width: 100vw ; zoom: 100% ; }
+        @-ms-viewport { user-zoom: fixed ; }           @viewport { user-zoom: fixed ; }
+    </style>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.css" media="all"  type="text/css" />
+    <link rel="stylesheet" href="css/framework7.ios.min.css">
+    <link rel="stylesheet" href="css/framework7.ios.colors.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/estilo.css">
+
+    <script src="cordova.js"></script>          <!-- phantom library, needed for Cordova api calls, added during build -->
+    <script src="xdk/init-dev.js"></script>     <!-- normalizes device and document ready events, see README for details -->
+    
+    <script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+     <script src="js/bootstrap.js"></script>
+    <script src="js/app.js"></script>           <!-- recommended location of your JavaScript code relative to other JS files -->
+    <script src="js/my-app.js"></script>
+    <script src="js/almacenamiento.js"></script>
+    <script src="js/sha1.js"></script>
+    <script src="js/operacion.js"></script>
+</head>
+
+<body>
+
+    <div class="col-xs-12 radius">
+        <center><h3>Recepción de unidades a servicio</h3></center>
+        <br>
+                <div class="col-xs-12 paddingBottom20px">
+                    <button id="exitApp" class="col-xs-4 buttonRight2 btn btn-warning">
+                        <i class="fa fa-sign-out"></i>&nbsp;Salir
+                    </button>
+                </div>
+        <br>
+        <div class="toolbar tabbar tabbar-scrollable">
+            <div class="toolbar-inner">
+              <a href="javascript:irA('inicio')" class="tab-link ">Orden servicio</a>
+              <a href="javascript:irA('operacion')" class="tab-link active">Operaciones</a>
+              <a href="javascript:irA('inspeccion')" class="tab-link">Inspeccion visual</a>
+              <a href="javascript:irA('inventario')" class="tab-link">Inventario</a>
+            </div>
+        </div>
+        <div class="col-xs-12" style="border:solid 1px #AAA;">
+            <h3 class="text-center">Modo: <span id="ModoActivo"></span></h3>
+            <div class="list-block lineal">
+              <ul>
+                <li class="col-xs-4">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input type="text" id="headerFolio" value="" disabled="disabled" placeholder="Folio">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="col-xs-4">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input type="text" id="headerModelo" value="" disabled="disabled" placeholder="Automovil">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                  <li class="col-xs-4">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input type="text" id="headerCliente" value="" disabled="disabled" placeholder="Propietario">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                  
+              </ul>
+            </div>
+            
+            <hr class="col-xs-12 sinPadding" style="clear:both;">
+            <br>
+            <!-- Tabla de servicios -->
+            <div class="col-xs-6 sinPadding">
+                <div class="col-xs-9">
+                    <select class="form-control" id="servicios">
+                        <option value="">Servicios</option>
+                    </select>
+                </div>
+                <div class="bold fa fa-arrow-down text-24 col-xs-2 pull-right marginBottom30px btn sinPadding" onclick="operacion.insertarServicios()"></div>
+                
+                
+                <table class="encabezadoTableBlack table table-stripped sinMargin sinPadding col-xs-12" border="1" >
+                    <thead>
+                        <tr>
+                            <th class="col-xs-8">Servicio</th>
+                            <th class="col-xs-2">Precio</th>
+                            <th class="col-xs-2">Eliminar</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="scrollableDivServicios">
+                    <table id="gridServicios" class="cuerpoTableBlack table table-stripped sinMargin sinPadding col-xs-12" border="1">
+                        <!--<tbody>
+                             <tr><td class="col-xs-7">aa</td><td class="col-xs-2">aa</td><td class="col-xs-2">aa</td></tr>
+                             <tr><td class="col-xs-7">aa</td><td class="col-xs-2">aa</td><td class="col-xs-2">aa</td></tr>
+                             <tr><td class="col-xs-7">aa</td><td class="col-xs-2">aa</td><td class="col-xs-2">aa</td></tr>
+                             <tr><td class="col-xs-7">aa</td><td class="col-xs-2">aa</td><td class="col-xs-2">aa</td></tr>
+                             <tr><td class="col-xs-7">aa</td><td class="col-xs-2">aa</td><td class="col-xs-2">aa</td></tr>
+                        </tbody>-->
+                    </table>
+                </div>
+            </div>
+            <!-- Tabla de areas de oportunidad -->
+            <div class="col-xs-5 col-xs-offset-1 sinPadding">
+                <div onclick="operacion.convertirArea()" class="bold fa fa-arrow-left text-24 col-xs-2 pull-left marginBottom30px btn sinPadding"></div>
+                
+                <table class="encabezadoTableYellow table table-stripped sinMargin sinPadding col-xs-12" border="1">
+                    <thead>
+                        <tr>
+                            <th class="col-xs-5">Oportunidad</th>
+                            <th class="col-xs-1">Stat.</th>
+                            <th class="col-xs-3">Fecha</th>
+                            <th class="col-xs-3">Precio</th>
+
+                        </tr>
+                    </thead>
+                </table>
+                <div class="scrollableDivAreas">
+                    <table id="gridAreasOportunidad" class="cuerpoTableYellow table table-stripped sinMargin sinPadding col-xs-12 text-13" border="1">
+                        <!--<tbody>
+                            <tr><td class="col-xs-5">Liquido de frenos</td><td class="col-xs-1"><div class="circle"><i class="btn fa fa-times color-danger">&nbsp;</i></div></td><td class="col-xs-3">17-Abr-16</td><td class="col-xs-3">$ 150.00</td></tr>
+                            <tr><td class="col-xs-5">Anticongelante</td><td class="col-xs-1"><i class="btn fa fa-exclamation-triangle color-warning">&nbsp;</i></td><td class="col-xs-3">17-Abr-16</td><td class="col-xs-3">$ 150.00</td></tr>
+                            <tr><td class="col-xs-5">Llanta del. Izq.</td><td class="col-xs-1"><i class="btn fa fa-check color-success">&nbsp;</i></td><td class="col-xs-3">17-Abr-16</td><td class="col-xs-3"></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr>
+                        </tbody>-->
+                    </table>
+                </div>
+            </div>
+             <!-- Tabla de operaciones -->
+            <div class="col-xs-6 paddingTB30px">
+
+                <table class="encabezadoTableBlue table table-stripped sinMargin sinPadding col-xs-12" border="1" >
+                    <thead>
+                        <tr>
+                            <th class="col-xs-10">Operación</th>
+                            <th class="col-xs-2">Eliminar</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="scrollableDivOperaciones">
+                    <table id="gridOperaciones" class="cuerpoTableBlue table table-stripped sinMargin sinPadding col-xs-12" border="1">
+                        <!--<tbody>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                            <tr><td class="col-xs-10">aa</td><td class="col-xs-2">aa</td></tr>
+                        </tbody>-->
+                    </table>
+                </div>
+            </div>
+            <!-- Tabla de otros talleres -->
+            <div class="col-xs-5 col-xs-offset-1 sinPadding ">
+                <div  onclick="operacion.crearRecomendacion()" class="bold fa fa-arrow-down  text-24 col-xs-2 col-xs-offset-5 btn paddingTB10px"></div>
+                <div class="col-xs-12 fondo-rosa">
+                    <div class="col-xs-8 col-xs-offset-2 paddingTB10px">
+                        <select class="form-control" id="categoria" onchange="operacion.buscarTalleres()">
+                            <option value="">- Seleccione una Categoría -</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-8 col-xs-offset-2 paddingTB10px">
+                        <select class="form-control" id="taller">
+                            <option value="">- Seleccione un Taller -</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-8 col-xs-offset-2 paddingTB10px">
+                        <input name="area_recomendacion" class="form-control col-xs-12" id="area_recomendacion" value="" readonly="readonly">
+                    </div>
+                    <div class="col-xs-8 col-xs-offset-2 paddingTB10px">
+                        <textarea name="recomendacion" class="form-control col-xs-12" id="recomendacion"></textarea>
+                    </div>
+                    <div class="col-xs-8 col-xs-offset-2 paddingTB10px">
+                        <button class="col-xs-6 col-xs-offset-3  button button-fill color-green" id="btnRecomendar" onclick="operacion.recomendar()">
+                            <i class="fa fa-thumbs-o-up"> &nbsp; Recomendar</i>
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+            <br style="clear: both;">
+            <!-- Tabla de refacciones -->
+            <div class="col-xs-6 sinPadding">
+                <table class="encabezadoTableBrown table table-stripped sinMargin sinPadding col-xs-12" border="1">
+                    <thead>
+                        <tr>
+                            <th class="col-xs-8">Refacción</th>
+                            <th class="col-xs-2">Cantidad</th>
+                            <th class="col-xs-2">Cambiar</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="scrollableDivServicios">
+                    <table id="gridRefacciones" class="cuerpoTableBrown table table-stripped sinMargin sinPadding col-xs-12" border="1">
+                        <!--<tbody>
+                             <tr><td class="col-xs-8">Prestone Antifreeze Colant 5LMKL2345</td><td class="col-xs-2">1</td><td class="col-xs-2"><i class="btn fa fa-random">&nbsp;</i></td></tr>
+                             <tr><td></td><td></td><td></td></tr>
+                             <tr><td></td><td></td><td></td></tr>
+                             <tr><td></td><td></td><td></td></tr>
+                             <tr><td></td><td></td><td></td></tr>
+                        </tbody>-->
+                    </table>
+                </div>
+            </div>
+            <div class="col-xs-5 col-xs-offset-1 sinPadding">
+                <div class="col-xs-12">
+                    <img src="imagenes/logo.png" class="w100">
+                </div>
+                <!--<div class="col-xs-4">
+                    <input type="button" class="form-control button button-fill color-green fa fa-save" value="Guardar">
+                </div>-->
+                <div class="col-xs-6">
+                    <input type="button" class="form-control button button-fill color-blue fa fa-erase" value="Limpiar" onclick="operacion.btnLimpiar()">
+                </div>
+                <div class="col-xs-6">
+                    <input type="button" id="btnImprimir" class="form-control button button-fill color-cyan fa fa-print" value="Imprimir" onclick='almacenamiento.imprimirFacturaPorFolio();'>
+                </div>
+            </div>
+            
+            <br>
+            
+            
+            
+        </div>
+    </div>
+</body>
+</html>

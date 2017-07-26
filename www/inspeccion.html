@@ -1,0 +1,654 @@
+<html>
+
+<head>
+    <title></title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    <!-- see http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-tip-dont-forget-the-viewport-meta-tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <style>
+        /* following two viewport lines are equivalent to the meta viewport statement above, needed for Windows */
+        /* see http://www.quirksmode.org/blog/archives/2014/05/html5_dev_conf.html and http://dev.w3.org/csswg/css-device-adapt/ */
+        @-ms-viewport { width: 100vw ; zoom: 100% ; }  @viewport { width: 100vw ; zoom: 100% ; }
+        @-ms-viewport { user-zoom: fixed ; }           @viewport { user-zoom: fixed ; }
+    </style>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.css" media="all"  type="text/css" />
+    <link rel="stylesheet" href="css/framework7.ios.min.css">
+    <link rel="stylesheet" href="css/framework7.ios.colors.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/estilo.css">
+
+    <script src="cordova.js"></script>          <!-- phantom library, needed for Cordova api calls, added during build -->
+    <script src="xdk/init-dev.js"></script>     <!-- normalizes device and document ready events, see README for details -->
+    
+    <script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+     <script src="js/bootstrap.js"></script>
+    <script src="js/app.js"></script>           <!-- recommended location of your JavaScript code relative to other JS files -->
+    <script src="js/my-app.js"></script>
+    <script src="js/almacenamiento.js"></script>
+    <script src="js/sha1.js"></script>
+    <script src="js/inspeccion.js"></script>
+</head>
+
+<body>
+
+    <div class="col-xs-12 radius">
+        <center><h3>Recepción de unidades a servicio</h3></center>
+        <br>
+                <div class="col-xs-12 paddingBottom20px">
+                    <button id="exitApp" class="col-xs-4 buttonRight2 btn btn-warning">
+                        <i class="fa fa-sign-out"></i>&nbsp;Salir
+                    </button>
+                </div>
+        <br>
+        <div class="toolbar tabbar tabbar-scrollable">
+            <div class="toolbar-inner">
+              <a href="javascript:irA('inicio')" class="tab-link ">Orden servicio</a>
+              <a href="javascript:irA('operacion')" class="tab-link ">Operaciones</a>
+              <a href="javascript:irA('inspeccion')" class="tab-link active">Inspeccion visual</a>
+              <a href="javascript:irA('inventario')" class="tab-link">Inventario</a>
+            </div>
+        </div>
+        <div class="col-xs-12" style="border:solid 1px #AAA;">
+            <h3 class="text-center">Modo: <span id="ModoActivo"></span></h3>
+            <div class="list-block lineal">
+              <ul>
+                <li class="col-xs-4">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input type="text" id="headerFolio" value="" disabled="disabled" placeholder="Folio">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="col-xs-4">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input type="text" id="headerModelo" value="" disabled="disabled" placeholder="Automovil">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                  <li class="col-xs-4">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input type="text" id="headerCliente" value="" disabled="disabled" placeholder="Propietario">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                  
+              </ul>
+            </div>
+            <hr class="col-xs-12 sinPadding" style="clear:both;">
+            <br>
+           
+            <!-- Bajo el cofre, interior-exterior -->
+            <div class="col-xs-12">
+                <!-- Bajo el cofre -->
+                <div class="col-xs-4 sinPadding">
+                    <div class="col-xs-12 sinPadding hauto"><h3>Bajo el cofre</h3></div>
+                    <div class="col-xs-12 radius fondo-gris-claro hauto sinMargin">
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('liquido_de_frenos','2','danger')">
+                                <i class="fa fa-times-circle color-rojo-standar liquido_de_frenos-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('liquido_de_frenos','2','success')">
+                                <i class="fa fa-check-circle-o color-verde-standar liquido_de_frenos-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Líquido de frenos</div>
+                            <input type="hidden" value="" id="liquido_de_frenos">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('fluido_de_direccion_hidraulica','2','danger')">
+                                <i class="fa fa-times-circle color-rojo-standar fluido_de_direccion_hidraulica-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('fluido_de_direccion_hidraulica','2','success')">
+                                <i class="fa fa-check-circle-o color-verde-standar fluido_de_direccion_hidraulica-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Fluído de direcció hidraúlica</div>
+                            <input type="hidden" value="" id="fluido_de_direccion_hidraulica">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('fluido_de_la_transmision','2','danger')">
+                                <i class="fa fa-times-circle color-rojo-standar fluido_de_la_transmision-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('fluido_de_la_transmision','2','success')">
+                                <i class="fa fa-check-circle-o color-verde-standar fluido_de_la_transmision-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Fluído de la transmisión</div>
+                            <input type="hidden" value="" id="fluido_de_la_transmision">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('anticongelante','2','danger')">
+                                <i class="fa fa-times-circle color-rojo-standar anticongelante-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('anticongelante','2','success')">
+                                <i class="fa fa-check-circle-o color-verde-standar anticongelante-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Anticongelante</div>
+                            <input type="hidden" value="" id="anticongelante">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('liquido_limpiabrisas','2','danger')">
+                                <i class="fa fa-times-circle color-rojo-standar liquido_limpiabrisas-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('liquido_limpiabrisas','2','success')">
+                                <i class="fa fa-check-circle-o color-verde-standar liquido_limpiabrisas-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Líquido limpiaparabrisas</div>
+                            <input type="hidden" value="" id="liquido_limpiabrisas">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('bandas_y_mangueras','2','danger')">
+                                <i class="fa fa-times-circle color-rojo-standar bandas_y_mangueras-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('bandas_y_mangueras','2','success')">
+                                <i class="fa fa-check-circle-o color-verde-standar bandas_y_mangueras-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Bandas y mangueras</div>
+                            <input type="hidden" value="" id="bandas_y_mangueras">
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                
+                <!-- interior-exterior -->
+                <div class="col-xs-8 sinPaddingRight">
+                    <div class="col-xs-12 sinPadding hauto"><h3>Interior - Exterior</h3></div>
+                    <div class="col-xs-12 radius fondo-gris-claro hauto sinMargin">
+                        <div class="col-xs-6 sinPadding">
+                            <div class="col-xs-12 sinPadding">
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_de_faros','3','danger')">
+                                    <i class="fa fa-times-circle color-rojo-standar luces_de_faros-danger fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_de_faros','3','warning')">
+                                    <i class="fa fa-exclamation-triangle color-amarillo-standar luces_de_faros-warning fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_de_faros','3','success')">
+                                    <i class="fa fa-check-circle-o color-verde-standar luces_de_faros-success fa-2x"></i>
+                                </div>
+                                <div class="col-xs-6 sinPadding">Luces de faros</div>
+                                <input type="hidden" value="" id="luces_de_faros">
+                            </div>
+                            <div class="col-xs-12 sinPadding">
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_auxiliares','3','danger')">
+                                    <i class="fa fa-times-circle color-rojo-standar luces_auxiliares-danger fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_auxiliares','3','warning')">
+                                    <i class="fa fa-exclamation-triangle color-amarillo-standar luces_auxiliares-warning fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_auxiliares','3','success')">
+                                    <i class="fa fa-check-circle-o color-verde-standar luces_auxiliares-success fa-2x"></i>
+                                </div>
+                                <div class="col-xs-6 sinPadding">Luces auxiliares</div>
+                                <input type="hidden" value="" id="luces_auxiliares">
+                            </div>
+                            <div class="col-xs-12 sinPadding">
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_direccionales','3','danger')">
+                                    <i class="fa fa-times-circle color-rojo-standar luces_direccionales-danger fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_direccionales','3','warning')">
+                                    <i class="fa fa-exclamation-triangle color-amarillo-standar luces_direccionales-warning fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_direccionales','3','success')">
+                                    <i class="fa fa-check-circle-o color-verde-standar luces_direccionales-success fa-2x"></i>
+                                </div>
+                                <div class="col-xs-6 sinPadding">Luces direccionales</div>
+                                <input type="hidden" value="" id="luces_direccionales">
+                            </div>
+                            <div class="col-xs-12 sinPadding">
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_de_freno_y_reversa','3','danger')">
+                                    <i class="fa fa-times-circle color-rojo-standar luces_de_freno_y_reversa-danger fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_de_freno_y_reversa','3','warning')">
+                                    <i class="fa fa-exclamation-triangle color-amarillo-standar luces_de_freno_y_reversa-warning fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_de_freno_y_reversa','3','success')">
+                                    <i class="fa fa-check-circle-o color-verde-standar luces_de_freno_y_reversa-success fa-2x"></i>
+                                </div>
+                                <div class="col-xs-6 sinPadding">Luces freno y reversa</div>
+                                <input type="hidden" value="" id="luces_de_freno_y_reversa">
+                            </div>
+                            <div class="col-xs-12 sinPadding">
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_interior','3','danger')">
+                                    <i class="fa fa-times-circle color-rojo-standar luces_interior-danger fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_interior','3','warning')">
+                                    <i class="fa fa-exclamation-triangle color-amarillo-standar luces_interior-warning fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('luces_interior','3','success')">
+                                    <i class="fa fa-check-circle-o color-verde-standar luces_interior-success fa-2x"></i>
+                                </div>
+                                <div class="col-xs-6 sinPadding">Luces interior</div>
+                                <input type="hidden" value="" id="luces_interior">
+                            </div>
+                            <div class="col-xs-12 sinPadding">
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('claxon','3','danger')">
+                                    <i class="fa fa-times-circle color-rojo-standar claxon-danger fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('claxon','3','warning')">
+                                    <i class="fa fa-exclamation-triangle color-amarillo-standar claxon-warning fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('claxon','3','success')">
+                                    <i class="fa fa-check-circle-o color-verde-standar claxon-success fa-2x"></i>
+                                </div>
+                                <div class="col-xs-6 sinPadding">Claxón</div>
+                                <input type="hidden" value="" id="claxon">
+                            </div>
+                            
+                        </div>
+                        <div class="col-xs-6 sinPadding">
+                            <div class="col-xs-12 sinPadding">
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('pluma_parabrisas_del','3','danger')">
+                                    <i class="fa fa-times-circle color-rojo-standar pluma_parabrisas_del-danger fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('pluma_parabrisas_del','3','warning')">
+                                    <i class="fa fa-exclamation-triangle color-amarillo-standar pluma_parabrisas_del-warning fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('pluma_parabrisas_del','3','success')">
+                                    <i class="fa fa-check-circle-o color-verde-standar pluma_parabrisas_del-success fa-2x"></i>
+                                </div>
+                                <div class="col-xs-6 sinPadding">Pluma parabrisas del.</div>
+                                <input type="hidden" value="" id="pluma_parabrisas_del">
+                            </div>
+                            <div class="col-xs-12 sinPadding">
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('pluma_parabrisas_tras','3','danger')">
+                                    <i class="fa fa-times-circle color-rojo-standar pluma_parabrisas_tras-danger fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('pluma_parabrisas_tras','3','warning')">
+                                    <i class="fa fa-exclamation-triangle color-amarillo-standar pluma_parabrisas_tras-warning fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('pluma_parabrisas_tras','3','success')">
+                                    <i class="fa fa-check-circle-o color-verde-standar pluma_parabrisas_tras-success fa-2x"></i>
+                                </div>
+                                <div class="col-xs-6 sinPadding">Pluma parabrisas tras.</div>
+                                <input type="hidden" value="" id="pluma_parabrisas_tras">
+                            </div>
+                            <div class="col-xs-12 sinPadding">
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('birlo_de_seguridad','3','danger')">
+                                    <i class="fa fa-times-circle color-rojo-standar birlo_de_seguridad-danger fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('birlo_de_seguridad','3','warning')">
+                                    <i class="fa fa-exclamation-triangle color-amarillo-standar birlo_de_seguridad-warning fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('birlo_de_seguridad','3','success')">
+                                    <i class="fa fa-check-circle-o color-verde-standar birlo_de_seguridad-success fa-2x"></i>
+                                </div>
+                                <div class="col-xs-6 sinPadding">Birlo de seguridad</div>
+                                <input type="hidden" value="" id="birlo_de_seguridad">
+                            </div>
+                            <div class="col-xs-12 sinPadding">
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('condiciones_de_pintura','3','danger')">
+                                    <i class="fa fa-times-circle color-rojo-standar condiciones_de_pintura-danger fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('condiciones_de_pintura','3','warning')">
+                                    <i class="fa fa-exclamation-triangle color-amarillo-standar condiciones_de_pintura-warning fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('condiciones_de_pintura','3','success')">
+                                    <i class="fa fa-check-circle-o color-verde-standar condiciones_de_pintura-success fa-2x"></i>
+                                </div>
+                                <div class="col-xs-6 sinPadding">Condiciones de pintura</div>
+                                <input type="hidden" value="" id="condiciones_de_pintura">
+                            </div>
+                            <div class="col-xs-12 sinPadding">
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('limpieza_de_interiores','3','danger')">
+                                    <i class="fa fa-times-circle color-rojo-standar limpieza_de_interiores-danger fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('limpieza_de_interiores','3','warning')">
+                                    <i class="fa fa-exclamation-triangle color-amarillo-standar limpieza_de_interiores-warning fa-2x"></i>
+                                </div>
+                                <div class="col-xs-2 sinPadding" onclick="cambiaColorInspeccion('limpieza_de_interiores','3','success')">
+                                    <i class="fa fa-check-circle-o color-verde-standar limpieza_de_interiores-success fa-2x"></i>
+                                </div>
+                                <div class="col-xs-6 sinPadding">Limpieza de interiores</div>
+                                <input type="hidden" value="" id="limpieza_de_interiores">
+                            </div>
+                            
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xs-12">
+                <div class="col-xs-12 sinPadding hauto"><h3>Llantas</h3></div>
+                <div class="col-xs-12 radius fondo-rosa hauto sinMargin">
+                      <div class="col-xs-4 sinPadding">
+                          <div class="col-xs-12">
+                              <div class="col-xs-9 sinPadding">
+                                  <div class="col-xs-12 sinPadding">
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('llanta_delantera_izq','3','danger')">
+                                            <i class="fa fa-times-circle color-rojo-standar llanta_delantera_izq-danger fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('llanta_delantera_izq','3','warning')">
+                                            <i class="fa fa-exclamation-triangle color-amarillo-standar llanta_delantera_izq-warning fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('llanta_delantera_izq','3','success')">
+                                            <i class="fa fa-check-circle-o color-verde-standar llanta_delantera_izq-success fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-6 sinPadding">Delantera izq.</div>
+                                      <input type="hidden" value="" id="llanta_delantera_izq">
+                                    </div>
+                                  <div class="col-xs-12 paddingTB10px">
+                                      <div class="col-xs-6 sinPadding">
+                                        <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value="" id="llanta_prof_del_izq" placeholder="Profundidad"  onkeyup="inspeccion.ActualizarMedicionLLantas()" onblur="cambiarColorLlanta('llanta_delantera_izq',this.value);">
+                                      </div>
+                                      <div class="col-xs-6 sinPadding">
+                                        <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value=""  id="llanta_pres_del_izq" placeholder="Presión PSI" onkeyup="inspeccion.ActualizarMedicionLLantas()">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-xs-3 sinPadding">
+                                  <img src="imagenes/llanta.png" class="col-xs-11 llanta_delantera_izq-imagen">
+                              </div>
+                        </div>
+                        <div class="col-xs-12">
+                              <div class="col-xs-9 sinPadding">
+                                  <div class="col-xs-12 sinPadding">
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('llanta_trasera_izq','3','danger')">
+                                            <i class="fa fa-times-circle color-rojo-standar llanta_trasera_izq-danger fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('llanta_trasera_izq','3','warning')">
+                                            <i class="fa fa-exclamation-triangle color-amarillo-standar llanta_trasera_izq-warning fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('llanta_trasera_izq','3','success')">
+                                            <i class="fa fa-check-circle-o color-verde-standar llanta_trasera_izq-success fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-6 sinPadding">Trasera izq.</div>
+                                      <input type="hidden" value="" id="llanta_trasera_izq">
+                                    </div>
+                                  <div class="col-xs-12 paddingTB10px">
+                                      <div class="col-xs-6 sinPadding">
+                                        <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value="" id="llanta_prof_tras_izq"  placeholder="Profundidad" onkeyup="inspeccion.ActualizarMedicionLLantas()" onblur="cambiarColorLlanta('llanta_trasera_izq',this.value);">
+                                      </div>
+                                      <div class="col-xs-6 sinPadding">
+                                        <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value="" id="llanta_pres_tras_izq"  placeholder="Presión PSI" onkeyup="inspeccion.ActualizarMedicionLLantas()">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-xs-3 sinPadding">
+                                  <img src="imagenes/llanta.png" class="col-xs-11 llanta_trasera_izq-imagen">
+                              </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-4 sinPadding">
+                          <div class="col-xs-12">
+                              <div class="col-xs-9 sinPadding">
+                                  <div class="col-xs-12 sinPadding">
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('llanta_delantera_der','3','danger')">
+                                            <i class="fa fa-times-circle color-rojo-standar llanta_delantera_der-danger fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('llanta_delantera_der','3','warning')">
+                                            <i class="fa fa-exclamation-triangle color-amarillo-standar llanta_delantera_der-warning fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('llanta_delantera_der','3','success')">
+                                            <i class="fa fa-check-circle-o color-verde-standar llanta_delantera_der-success fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-6 sinPadding">Delantera der.</div>
+                                      <input type="hidden" value="" id="llanta_delantera_der">
+                                    </div>
+                                  <div class="col-xs-12 paddingTB10px">
+                                      <div class="col-xs-6 sinPadding">
+                                        <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value="" id="llanta_prof_del_der"  placeholder="Profundidad" onkeyup="inspeccion.ActualizarMedicionLLantas()" onblur="cambiarColorLlanta('llanta_delantera_der',this.value);">
+                                      </div>
+                                      <div class="col-xs-6 sinPadding">
+                                        <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value="" id="llanta_pres_del_der"  placeholder="Presión PSI" onkeyup="inspeccion.ActualizarMedicionLLantas()">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-xs-3 sinPadding">
+                                  <img src="imagenes/llanta.png" class="col-xs-11 llanta_delantera_der-imagen">
+                              </div>
+                          </div>
+                          <div class="col-xs-12">
+                              <div class="col-xs-9 sinPadding">
+                                  <div class="col-xs-12 sinPadding">
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('llanta_trasera_der','3','danger')">
+                                            <i class="fa fa-times-circle color-rojo-standar llanta_trasera_der-danger fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('llanta_trasera_der','3','warning')">
+                                            <i class="fa fa-exclamation-triangle color-amarillo-standar llanta_trasera_der-warning fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('llanta_trasera_der','3','success')">
+                                            <i class="fa fa-check-circle-o color-verde-standar llanta_trasera_der-success fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-6 sinPadding">Trasera der.</div>
+                                      <input type="hidden" value="" id="llanta_trasera_der">
+                                    </div>
+                                  <div class="col-xs-12 paddingTB10px">
+                                      <div class="col-xs-6 sinPadding">
+                                        <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value="" id="llanta_prof_tras_der"  placeholder="Profundidad" onkeyup="inspeccion.ActualizarMedicionLLantas()" onblur="cambiarColorLlanta('llanta_trasera_der',this.value);">
+                                      </div>
+                                      <div class="col-xs-6 sinPadding">
+                                        <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value=""  id="llanta_pres_tras_der" placeholder="Presión PSI" onkeyup="inspeccion.ActualizarMedicionLLantas()">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-xs-3 sinPadding">
+                                  <img src="imagenes/llanta.png" class="col-xs-11 llanta_trasera_der-imagen">
+                              </div>
+                          </div>
+                    </div>
+                    <div class="col-xs-4 sinPadding">
+                          <div class="col-xs-9 sinPadding">
+                              <div class="col-xs-12 sinPadding">
+                                    <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('refaccion','3','danger')"><i class="fa fa-times-circle color-rojo-standar refaccion-danger fa-2x"></i></div>
+                                    <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('refaccion','3','warning')"><i class="fa fa-exclamation-triangle color-amarillo-standar refaccion-warning fa-2x"></i></div>
+                                    <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('refaccion','3','success')"><i class="fa fa-check-circle-o color-verde-standar refaccion-success fa-2x"></i></div>
+                                    <div class="col-xs-6 sinPadding">Refacción.</div>
+                                  <input type="hidden" value="" id="refaccion">
+                                </div>
+                              <div class="col-xs-12 paddingTB10px">
+                                  <div class="col-xs-6 sinPadding">
+                                    <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value=""  id="llanta_prof_ref" placeholder="Profundidad" onkeyup="inspeccion.ActualizarMedicionLLantas()" onblur="cambiarColorLlanta('refaccion',this.value);">
+                                  </div>
+                                  <div class="col-xs-6 sinPadding">
+                                    <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value=""  id="llanta_pres_ref" placeholder="Presión PSI" onkeyup="inspeccion.ActualizarMedicionLLantas()">
+                                  </div>
+                              </div>
+                              <div class="col-xs-12">
+                                  <table border="0">
+                                    <tr><td>
+                                        <input type="checkbox" id="chkSinLlantaRefaccion" onClick="inspeccion.cambioSinLlantaRefaccion(this);" style="zoom:200%;">
+                                    </td><td>
+                                        Sin llanta de refacción.
+                                    </td></tr>
+                                  </table> 
+                              </div>
+                          </div>
+                          <div class="col-xs-3 sinPadding">
+                              <img src="imagenes/llanta.png" class="col-xs-10 refaccion-imagen">
+                          </div>
+                      </div>
+                </div>
+            </div>
+            
+            <!-- FRENOS -->
+            <div class="col-xs-12">
+                <div class="col-xs-12 sinPadding hauto"><h3>Frenos</h3></div>
+                <div class="col-xs-12 radius fondo-gris-claro hauto sinMargin">
+                      <div class="col-xs-4 sinPadding">
+                          <div class="col-xs-12">
+                              <div class="col-xs-9 sinPadding">
+                                  <div class="col-xs-12 sinPadding">
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('freno_delantero_izq','3','danger')">
+                                            <i class="fa fa-times-circle color-rojo-standar freno_delantero_izq-danger fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('freno_delantero_izq','3','warning')">
+                                            <i class="fa fa-exclamation-triangle color-amarillo-standar freno_delantero_izq-warning fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('freno_delantero_izq','3','success')">
+                                            <i class="fa fa-check-circle-o color-verde-standar freno_delantero_izq-success fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-6 sinPadding">Delantera izq.</div>
+                                      <input type="hidden" value="" id="freno_delantero_izq">
+                                    </div>
+                                  <div class="col-xs-12 paddingTB10px">
+                                      <div class="col-xs-6 sinPadding">
+                                          <select class="form-control" id="freno_vida_del_izq" onchange="inspeccion.ActualizarMedicionLLantas(); cambiarColorFreno('freno_delantero_izq',this.value);" >
+                                              <option value="" selected="selected">-Estado-</option>
+                                              <option value="1">Buen estado</option>
+                                              <option value="2">Servicio próximo</option>
+                                              <option value="3">Atención inmediata</option>
+                                              <option value="-1">Sin revisión</option>
+                                          </select>
+                                      </div>
+                                      <div class="col-xs-6 sinPadding">
+                                        <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value="" id="freno_grosor_del_izq"  placeholder="Grosor mm." onkeyup="inspeccion.ActualizarMedicionLLantas()">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-xs-3 sinPadding">
+                                  <img src="imagenes/freno.png" class="col-xs-12 sinPadding freno_delantero_izq-imagenFreno">
+                              </div>
+                        </div>
+                        <div class="col-xs-12">
+                              <div class="col-xs-9 sinPadding">
+                                  <div class="col-xs-12 sinPadding">
+                                        
+                                      <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('freno_trasero_izq','3','danger')">
+                                            <i class="fa fa-times-circle color-rojo-standar freno_trasero_izq-danger fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('freno_trasero_izq','3','warning')">
+                                            <i class="fa fa-exclamation-triangle color-amarillo-standar freno_trasero_izq-warning fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('freno_trasero_izq','3','success')">
+                                            <i class="fa fa-check-circle-o color-verde-standar freno_trasero_izq-success fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-6 sinPadding">Trasero izq.</div>
+                                      <input type="hidden" value="" id="freno_trasero_izq">
+                                    </div>
+                                  <div class="col-xs-12 paddingTB10px">
+                                      <div class="col-xs-6 sinPadding">
+                                          <select class="form-control" id="freno_vida_tras_izq" onchange="inspeccion.ActualizarMedicionLLantas(); cambiarColorFreno('freno_trasero_izq',this.value);" >
+                                              <option value="" selected="selected">-Estado-</option>
+                                              <option value="1">Buen estado</option>
+                                              <option value="2">Servicio próximo</option>
+                                              <option value="3">Atención inmediata</option>
+                                              <option value="-1">Sin revisión</option>
+                                          </select>
+                                      </div>
+                                      <div class="col-xs-6 sinPadding">
+                                        <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value="" id="freno_grosor_tras_izq"  placeholder="Grosor mm." onkeyup="inspeccion.ActualizarMedicionLLantas()">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-xs-3 sinPadding">
+                                  <img src="imagenes/freno.png" class="col-xs-12 sinPadding freno_trasero_izq-imagenFreno">
+                              </div>
+                        </div>
+                      </div>
+                      <div class="col-xs-4 sinPadding">
+                          <div class="col-xs-12">
+                              <div class="col-xs-9 sinPadding">
+                                  <div class="col-xs-12 sinPadding">
+                                        
+                                      <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('freno_delantero_der','3','danger')">
+                                            <i class="fa fa-times-circle color-rojo-standar freno_delantero_der-danger fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('freno_delantero_der','3','warning')">
+                                            <i class="fa fa-exclamation-triangle color-amarillo-standar freno_delantero_der-warning fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('freno_delantero_der','3','success')">
+                                            <i class="fa fa-check-circle-o color-verde-standar freno_delantero_der-success fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-6 sinPadding">Delantero der.</div>
+                                      <input type="hidden" value="" id="freno_delantero_der">
+                                    </div>
+                                  <div class="col-xs-12 paddingTB10px">
+                                      <div class="col-xs-6 sinPadding">
+                                          <select class="form-control" id="freno_vida_del_der" onchange="inspeccion.ActualizarMedicionLLantas(); cambiarColorFreno('freno_delantero_der',this.value);" >
+                                              <option value="" selected="selected">-Estado-</option>
+                                              <option value="1">Buen estado</option>
+                                              <option value="2">Servicio próximo</option>
+                                              <option value="3">Atención inmediata</option>
+                                              <option value="-1">Sin revisión</option>
+                                          </select>
+                                      </div>
+                                      <div class="col-xs-6 sinPadding">
+                                        <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value="" id="freno_grosor_del_der"  placeholder="Grosor mm." onkeyup="inspeccion.ActualizarMedicionLLantas()">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-xs-3 sinPadding">
+                                  <img src="imagenes/freno.png" class="col-xs-12 sinPadding freno_delantero_der-imagenFreno">
+                              </div>
+                          </div>
+                          <div class="col-xs-12">
+                              <div class="col-xs-9 sinPadding">
+                                  <div class="col-xs-12 sinPadding">
+                                        
+                                      <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('freno_trasero_der','3','danger')">
+                                            <i class="fa fa-times-circle color-rojo-standar freno_trasero_der-danger fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('freno_trasero_der','3','warning')">
+                                            <i class="fa fa-exclamation-triangle color-amarillo-standar freno_trasero_der-warning fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-2 sinPadding" onclick="//cambiaColorInspeccion('freno_trasero_der','3','success')">
+                                            <i class="fa fa-check-circle-o color-verde-standar freno_trasero_der-success fa-2x"></i>
+                                      </div>
+                                        <div class="col-xs-6 sinPadding">Trasero der.</div>
+                                      <input type="hidden" value="" id="freno_trasero_der">
+                                    </div>
+                                  <div class="col-xs-12 paddingTB10px">
+                                      <div class="col-xs-6 sinPadding">
+                                          <select class="form-control" id="freno_vida_tras_der" onchange="inspeccion.ActualizarMedicionLLantas();
+                                          cambiarColorFreno('freno_trasero_der',this.value);">
+                                              <option value="" selected="selected">-Estado-</option>
+                                              <option value="1">Buen estado</option>
+                                              <option value="2">Servicio próximo</option>
+                                              <option value="3">Atención inmediata</option>
+                                              <option value="-1">Sin revisión</option>
+                                          </select>
+                                      </div>
+                                      <div class="col-xs-6 sinPadding">
+                                        <input type="number" onkeypress="return permiteNumerosConDosDecimales(event,this)" class="form-control" value=""  id="freno_grosor_tras_der" placeholder="Grosor mm." onkeyup="inspeccion.ActualizarMedicionLLantas()">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-xs-3 sinPadding">
+                                  <img src="imagenes/freno.png" class="col-xs-12 sinPadding freno_trasero_der-imagenFreno">
+                              </div>
+                          </div>
+                    </div>
+                    <div class="col-xs-4 sinPadding">
+                         <div class="col-xs-11 paddingTB30px">
+                            <img src="imagenes/logo-fondo-blanco.png" class="col-xs-12">
+                         </div> 
+                    </div>
+                </div>
+            </div>
+            <div class="paddingTB10px col-xs-12">&nbsp;</div>
+            <div class="col-xs-6 col-xs-offset-3">
+                <!--<div class="col-xs-4">
+                    <input type="button" class="form-control button button-fill color-green fa fa-save" value="Guardar">
+                </div>-->
+                <div class="col-xs-6">
+                    <input type="button" class="form-control button button-fill color-blue fa fa-erase" value="Limpiar" onclick="inspeccion.btnLimpiar()">
+                </div>
+                <div class="col-xs-6">
+                    <input type="button" id="btnImprimir" onclick="almacenamiento.imprimirFacturaPorFolio();" class="form-control button button-fill color-cyan fa fa-print" value="Imprimir">
+                </div>
+            </div>
+            <div class="paddingTB10px col-xs-12">&nbsp;</div>
+            
+            
+            
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    <!-- see http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-tip-dont-forget-the-viewport-meta-tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <style>
+        /* following two viewport lines are equivalent to the meta viewport statement above, needed for Windows */
+        /* see http://www.quirksmode.org/blog/archives/2014/05/html5_dev_conf.html and http://dev.w3.org/csswg/css-device-adapt/ */
+        @-ms-viewport { width: 100vw ; zoom: 100% ; }  @viewport { width: 100vw ; zoom: 100% ; }
+        @-ms-viewport { user-zoom: fixed ; }           @viewport { user-zoom: fixed ; }
+    </style>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.css" media="all"  type="text/css" />
+    <link rel="stylesheet" href="css/framework7.ios.min.css">
+    <link rel="stylesheet" href="css/framework7.ios.colors.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/estilo.css">
+
+    <link rel="stylesheet" href="css/estilo.css">
+    
+
+    <script src="cordova.js"></script>          <!-- phantom library, needed for Cordova api calls, added during build -->
+    <script src="xdk/init-dev.js"></script>     <!-- normalizes device and document ready events, see README for details -->
+    <script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/my-app.js"></script>
+    <script src="js/almacenamiento.js"></script>
+    <script src="js/sha1.js"></script>
+    <script src="js/index.js"></script>
+</head>
+
+<body>
+    <div class="view">
+      <div class="page">
+        <div class="page-content login-screen-content">
+          <div class="login-screen-title">
+            <div class="row">
+                <img src="imagenes/logo.png" class="col-80">
+            </div>
+          </div>
+          <form>
+            <div class="list-block">
+              <ul>
+                <li class="item-content">
+                  <div class="item-inner">
+                    <!--<div class="item-title label">Correo</div>-->
+                    <div class="item-input">
+                      <input type="text" id="email" class="text-center" placeholder="Correo electrónico" value=""><!-- soporte@avansys.com.mx -->
+                    </div>
+                  </div>
+                </li>
+                <li class="item-content">
+                  <div class="item-inner">
+                    <!--<div class="item-title label">Contraseña</div>-->
+                    <div class="item-input">
+                      <input type="password" class="text-center" id="contrasena" placeholder="Contraseña" value=""><!-- 123456 -->
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="list-block">
+              <ul>
+                  <li><a href="javascript:ingreso.ingresar();" class="item-link list-button"><i class="fa fa-login"></i>&nbsp;Ingresar</a>
+                  </li>
+              </ul>
+              <div class="list-block-label">
+                <p>Aplicación para recepción de unidades de servicio</p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+</body>
+</html>

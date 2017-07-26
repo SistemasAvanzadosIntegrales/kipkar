@@ -1,0 +1,316 @@
+<html>
+
+<head>
+    <title></title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    <!-- see http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-tip-dont-forget-the-viewport-meta-tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <style>
+        /* following two viewport lines are equivalent to the meta viewport statement above, needed for Windows */
+        /* see http://www.quirksmode.org/blog/archives/2014/05/html5_dev_conf.html and http://dev.w3.org/csswg/css-device-adapt/ */
+        @-ms-viewport { width: 100vw ; zoom: 100% ; }  @viewport { width: 100vw ; zoom: 100% ; }
+        @-ms-viewport { user-zoom: fixed ; }           @viewport { user-zoom: fixed ; }
+    </style>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.css" media="all"  type="text/css" />
+    <link rel="stylesheet" href="css/framework7.ios.min.css">
+    <link rel="stylesheet" href="css/framework7.ios.colors.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/estilo.css">
+
+    <script src="cordova.js"></script>          <!-- phantom library, needed for Cordova api calls, added during build -->
+    <script src="xdk/init-dev.js"></script>     <!-- normalizes device and document ready events, see README for details -->
+    
+    <script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+     <script src="js/bootstrap.js"></script>
+    <script src="js/app.js"></script>           <!-- recommended location of your JavaScript code relative to other JS files -->
+    <script src="js/my-app.js"></script>
+    <script src="js/almacenamiento.js"></script>
+    <script src="js/sha1.js"></script>
+    <script src="js/camara.js"></script>
+    <script src="js/inventario.js"></script>
+</head>
+
+<body>
+
+    <div class="col-xs-12 radius">
+        <center><h3>Recepción de unidades a servicio</h3></center>
+        <br>
+                <div class="col-xs-12 paddingBottom20px">
+                    <button id="exitApp" class="col-xs-4 buttonRight2 btn btn-warning">
+                        <i class="fa fa-sign-out"></i>&nbsp;Salir
+                    </button>
+                </div>
+        <br>
+        <div class="toolbar tabbar tabbar-scrollable">
+            <div class="toolbar-inner">
+              <a href="javascript:irA('inicio')" class="tab-link">Orden servicio</a>
+              <a href="javascript:irA('operacion')" class="tab-link">Operaciones</a>
+              <a href="javascript:irA('inspeccion')" class="tab-link">Inspeccion visual</a>
+              <a href="javascript:irA('inventario')" class="tab-link active">Inventario</a>
+            </div>
+        </div>
+        <div class="col-xs-12" style="border:solid 1px #AAA;">
+            <h3 class="text-center">Modo: <span id="ModoActivo"></span></h3>
+            <div class="list-block lineal">
+              <ul>
+                <li class="col-xs-4">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input type="text" id="headerFolio" value="" disabled="disabled" placeholder="Folio">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="col-xs-4">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input type="text" id="headerModelo" value="" disabled="disabled" placeholder="Automovil">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                  <li class="col-xs-4">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input type="text" id="headerCliente" value="" disabled="disabled" placeholder="Propietario">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                  
+              </ul>
+            </div>
+            <hr class="col-xs-12 sinPadding" style="clear:both;">
+            <br>
+           
+            <!-- inventario -->
+            <div class="col-xs-4">
+                <div class="col-xs-12 sinPadding">
+                    <div class="col-xs-12 sinPadding hauto"><h3>Inventario</h3></div>
+                    <div class="col-xs-12 radius fondo-gris-claro hauto sinMargin">
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('parabrisas','2','danger','1')">
+                                <i class="fa fa-times-circle color-rojo-standar parabrisas-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('parabrisas','2','success','1')">
+                                <i class="fa fa-check-circle-o color-verde-standar parabrisas-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Parabrisas</div>
+                            <input type="hidden" value="" id="parabrisas">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('espejos_laterales','2','danger','2')">
+                                <i class="fa fa-times-circle color-rojo-standar espejos_laterales-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('espejos_laterales','2','success','2')">
+                                <i class="fa fa-check-circle-o color-verde-standar espejos_laterales-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Espejos laterales</div>
+                            <input type="hidden" value="" id="espejos_laterales">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('retrovisor','2','danger','3')">
+                                <i class="fa fa-times-circle color-rojo-standar retrovisor-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('retrovisor','2','success','3')">
+                                <i class="fa fa-check-circle-o color-verde-standar retrovisor-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Retrovisor</div>
+                            <input type="hidden" value="" id="retrovisor">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('antena','2','danger','4')">
+                                <i class="fa fa-times-circle color-rojo-standar antena-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('antena','2','success','4')">
+                                <i class="fa fa-check-circle-o color-verde-standar antena-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Antena</div>
+                            <input type="hidden" value="" id="antena">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('tapones_de_rueda','2','danger','5')">
+                                <i class="fa fa-times-circle color-rojo-standar tapones_de_rueda-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('tapones_de_rueda','2','success','5')">
+                                <i class="fa fa-check-circle-o color-verde-standar tapones_de_rueda-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Tapones de rueda</div>
+                            <input type="hidden" value="" id="tapones_de_rueda">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('tapetes','2','danger','6')">
+                                <i class="fa fa-times-circle color-rojo-standar tapetes-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('tapetes','2','success','6')">
+                                <i class="fa fa-check-circle-o color-verde-standar tapetes-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Tapetes</div>
+                            <input type="hidden" value="" id="tapetes">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('estereo','2','danger','6')">
+                                <i class="fa fa-times-circle color-rojo-standar estereo-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('estereo','2','success','6')">
+                                <i class="fa fa-check-circle-o color-verde-standar estereo-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Estéreo</div>
+                            <input type="hidden" value="" id="estereo">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('herramientas','2','danger','6')">
+                                <i class="fa fa-times-circle color-rojo-standar herramientas-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('herramientas','2','success','6')">
+                                <i class="fa fa-check-circle-o color-verde-standar herramientas-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Herramientas</div>
+                            <input type="hidden" value="" id="herramientas">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('rayones','2','danger','6')">
+                                <i class="fa fa-times-circle color-rojo-standar rayones-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('rayones','2','success','6')">
+                                <i class="fa fa-check-circle-o color-verde-standar rayones-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Rayones</div>
+                            <input type="hidden" value="" id="rayones">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('golpes','2','danger','6')">
+                                <i class="fa fa-times-circle color-rojo-standar golpes-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('golpes','2','success','6')">
+                                <i class="fa fa-check-circle-o color-verde-standar golpes-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Golpes</div>
+                            <input type="hidden" value="" id="golpes">
+                        </div>
+                        
+                        <div class="col-xs-12 sinPadding">
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('vestiduras','2','danger','6')">
+                                <i class="fa fa-times-circle color-rojo-standar vestiduras-danger fa-2x"></i>
+                            </div>
+                            <div class="col-xs-2 sinPadding" onclick="cambiaColorInventario('vestiduras','2','success','6')">
+                                <i class="fa fa-check-circle-o color-verde-standar vestiduras-success fa-2x"></i>
+                            </div>
+                            <div class="col-xs-8 sinPadding">Vestiduras</div>
+                            <input type="hidden" value="" id="vestiduras">
+                        </div>
+                        
+                    </div>
+                    <div class="col-xs-12 sinPadding hauto"><h3>Observaciones</h3></div>
+                    <div class="col-xs-12 radius fondo-gris-claro hauto sinMargin">
+                        <div class="col-xs-12 sinPadding">
+                            <textarea id="observaciones" style="width:100%; height:100px;"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- logo y botones -->   
+                <div class="col-xs-12" style="padding-top:10px">&nbsp;</div>
+                <div class="col-xs-12 ">
+                    <div class="col-xs-12 sinPadding">
+                        <div class="col-xs-12 paddingTB30px">
+                            <img src="imagenes/logo-fondo-blanco.png" class="col-xs-12">
+                        </div> 
+                    </div>
+
+                    <div class="col-xs-12 marginBottom5px">
+                        <input type="button" class="form-control button button-fill color-green fa fa-save" value="Guardar y cerrar" onclick="inventario.generarPedido(false);">
+                    </div>
+                    <div class="col-xs-12 marginBottom5px">
+                        <input type="button" class="form-control button button-fill color-green fa fa-save" value="Dejar abierta" onclick="inventario.generarPedido(true);">
+                    </div>
+                    <div class="col-xs-12 marginBottom5px">
+                        <input type="button" class="form-control button button-fill color-blue fa fa-erase" value="Limpiar" onclick="inventario.btnLimpiar();">
+                    </div>
+                    <div class="col-xs-12 marginBottom5px"> 
+                        <input type="button" id="btnImprimir" onclick="almacenamiento.imprimirFacturaPorFolio();" class="form-control button button-fill color-cyan fa fa-print" value="Imprimir">
+                    </div>
+                </div>
+                <div class="paddingTB10px col-xs-12">&nbsp;</div>
+            </div>
+            <!-- Combustible -->
+                <div class="col-xs-8 sinPaddingRight">
+                    <div class="col-xs-12 sinPadding hauto"><h3>Combustible (<span id="porciento"></span>%)</h3></div>
+                    <div class="col-xs-12 radius fondo-rosa hauto sinMargin padding15px">
+                        <!-- marcas -->
+                        <div class="col-xs-12">
+                            <div class="col-xs-3 bordeLateral h10px sinPadding sinMargin"></div>
+                            <div class="col-xs-3 bordeRight h10px sinPadding sinMargin"></div>
+                            <div class="col-xs-3 bordeRight h10px sinPadding sinMargin"></div>
+                            <div class="col-xs-3 bordeRight h10px sinPadding sinMargin"></div>
+                        </div>
+                            <div class="list-block lineal sinFondo sinPadding sinMargin">
+                              <ul class="sinFondo">
+                                <!-- Slider (Range input) -->
+                                <li class="col-xs-12 sinPadding">
+                                  <div class="item-content sinPadding">
+                                    <div class="item-inner sinPadding" style="border:none">
+                                      <div class="item-input">
+                                        <div class="range-slider">
+                                          <input type="range" id="combustible" min="0" value="" max="100"  step="5" />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </li>
+
+                              </ul>
+                            </div>
+                        <!-- marcas -->
+                        <div class="col-xs-12">
+                            <div class="col-xs-3 bordeLateral h10px sinPadding sinMargin"></div>
+                            <div class="col-xs-3 bordeRight h10px sinPadding sinMargin"></div>
+                            <div class="col-xs-3 bordeRight h10px sinPadding sinMargin"></div>
+                            <div class="col-xs-3 bordeRight h10px sinPadding sinMargin"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fotos -->
+                <div class="col-xs-8 sinPaddingRight">
+                    <div class="col-xs-12 sinPadding hauto"><h3>Fotos</h3></div>
+                    <div class="col-xs-12 radius fondo-gris-claro hauto sinMargin">
+                        <div class="col-xs-12 sinPadding">
+                                <div class="col-xs-10 col-xs-offset-1 sinPadding" >
+                                    <div class="col-xs-12 radius hauto sinPadding sinMargin overflowy" style="min-height:480px; max-height:500px;" id="imagenes" >
+                                        <img scr="" class="col-xs-12 radius hauto bcenter fondo-azul-claro bordeClaro" id="canvas" style="display:none">
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="col-xs-12 marginTop15px">
+                            <button id="capturarFoto" onclick="capturar()" class="col-xs-4 col-xs-offset-2 col-xs-4  btn btn-primary marginRight10px" style="height:50px;"><i class="fa fa-camera">&nbsp;Tomar foto</i></button>
+                            <button id="eliminarFoto" onclick="eliminarFoto()" class="col-xs-4  btn btn-danger" style="height:50px;"><i class="fa fa-times-circle"> &nbsp;Eliminar foto</i></button>
+                        </div>
+                        
+                    </div>
+                </div>
+            <div class="paddingTB10px col-xs-12">&nbsp;</div>
+            
+           
+            
+            
+            
+        </div>
+    </div>
+</body>
+</html>

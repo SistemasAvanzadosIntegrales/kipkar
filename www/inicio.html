@@ -1,0 +1,400 @@
+<html>
+
+<head>
+    <title></title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    <!-- see http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-tip-dont-forget-the-viewport-meta-tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <style>
+        /* following two viewport lines are equivalent to the meta viewport statement above, needed for Windows */
+        /* see http://www.quirksmode.org/blog/archives/2014/05/html5_dev_conf.html and http://dev.w3.org/csswg/css-device-adapt/ */
+        @-ms-viewport { width: 100vw ; zoom: 100% ; }  @viewport { width: 100vw ; zoom: 100% ; }
+        @-ms-viewport { user-zoom: fixed ; }           @viewport { user-zoom: fixed ; }
+    </style>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.css" media="all"  type="text/css" />
+    <link rel="stylesheet" href="css/framework7.ios.min.css">
+    <link rel="stylesheet" href="css/framework7.ios.colors.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <!--<link rel="stylesheet" href="css/bootstrap-datetimepicker.css">-->
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/estilo.css">
+    
+
+    <script src="cordova.js"></script>          <!-- phantom library, needed for Cordova api calls, added during build -->
+    <script src="xdk/init-dev.js"></script>     <!-- normalizes device and document ready events, see README for details -->
+    
+    <script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/app.js"></script>           <!-- recommended location of your JavaScript code relative to other JS files -->
+    <script src="js/my-app.js"></script>
+    <script src="js/almacenamiento.js"></script>
+    <script src="js/sha1.js"></script>
+    <!--<script src="js/bootstrap-datetimepicker.js"></script>-->
+    <script src="js/inicio.js"></script>
+</head>
+
+<body> 
+
+    <div class="col-xs-12 radius">
+        <center><h3>Recepción de unidades a servicio</h3></center>
+        <br>
+                <div class="col-xs-12 paddingBottom20px">
+                    <button id="exitApp" class="col-xs-4 buttonRight2 btn btn-warning">
+                        <i class="fa fa-sign-out"></i>&nbsp;Salir
+                    </button>
+                </div>
+        <br>
+        
+        <div class="toolbar tabbar tabbar-scrollable">
+            <div class="toolbar-inner">
+              <a href="javascript:irA('inicio')" class="tab-link active">Orden servicio</a>
+              <a href="javascript:irA('operacion')" class="tab-link">Operaciones</a>
+              <a href="javascript:irA('inspeccion')" class="tab-link">Inspeccion visual</a>
+              <a href="javascript:irA('inventario')" class="tab-link">Inventario</a>
+            </div>
+        </div>
+        <div class="col-xs-12" style="border:solid 1px #AAA;">
+            <h3 class="text-center">Modo: <span id="ModoActivo"></span></h3>
+            
+            <div class="list-block lineal">
+              <ul>
+                <li class="col-xs-2 sinMargin sinPadding">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input id="txtPlacas" type="text" placeholder="Placas">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="col-xs-2 sinMargin sinPadding">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input id="txtFolio" type="text" placeholder="Folio">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                  <li class="col-xs-2 sinMargin sinPadding">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input id="txtNoSerie" type="text" placeholder="No. de Serie">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                  <li class="col-xs-2 sinMargin sinPadding">
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input id="txtCliente" type="text" placeholder="Propietario">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="col-xs-2 sinMargin sinPadding">
+                      <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input id="txtTelefono" type="text" placeholder="Teléfono">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="col-xs-2 sinMargin sinPadding">
+                      <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input id="txtEmail" type="text" placeholder="Email">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+              </ul>
+            </div>
+            <div class="list-block lineal">
+                <ul>
+                    <li class="col-xs-2 sinPadding col-xs-offset-2">
+                      <div class="acomodoBtnFiltrado">
+                        <button class="col-xs-12 button button-fill color-cyan sinMargin sinPadding" onClick="inicio.dameAutos();">
+                            <i class="fa fa-search"></i>&nbsp;Buscar
+                        </button>
+                      </div>
+                </li>
+                <li class="col-xs-2 sinMargin sinPadding">
+                      <div class="acomodoBtnFiltrado">
+                        <button class="col-xs-12 button button-fill color-cyan sinMargin sinPadding" onClick="LimpiarFiltros();">
+                            <i class="fa fa-exchange"></i>&nbsp;Limpiar
+                        </button>
+                      </div>
+                </li>
+                  <li class="col-xs-2 sinMargin sinPadding">
+                      <div class="acomodoBtnFiltrado">
+                        <button class="col-xs-12 button button-fill color-cyan sinMargin sinPadding" onClick="almacenamiento.modoConsulta(this);">
+                            <i class="fa fa-exchange"></i>&nbsp;Consultar
+                        </button>
+                      </div>
+                </li>
+                </ul>
+            </div>
+            <hr class="col-xs-12 sinPadding" style="clear:both;">
+            <br>
+            <table class="encabezadoTableBlack table table-stripped sinMargin sinPadding col-xs-12 text-13" border="1" >
+                <thead>
+                    <tr>
+                        <th class="col-x s-1" width="10%">Folio</th>
+                        <th class="col-x s-1" width="8%">Fecha</th>
+                        <th class="col-x s-1" width="8%">Placas</th>
+                        <th class="col-x s-1" width="10%">Marca</th>
+                        <th class="col-x s-1" width="10%">Modelo</th>
+                        <th class="col-x s-1" width="7%">Año</th>
+                        <th class="col-x s-1" width="13%">No. Serie</th>
+                        <th class="col-x s-1" width="8%">Estatus</th>
+                        <th class="col-x s-2" width="13%">Propietario</th>
+                        <th class="col-x s-2" width="13%">Asesor</th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="scrollableDivOperaciones">
+                <table id="gridAuto" class="cuerpoTableBlack table table-stripped sinMargin text-13" border="1" width="100%">
+                    <!--
+                    <tr><td class="col-xs-1">aa</td><td class="col-xs-2">aa</td><td class="col-xs-2">aa</td><td class="col-xs-2">aa</td><td class="col-xs-1">aa</td><td class="col-xs-1">aa</td><td class="col-xs-2">aa</td><td class="col-xs-2">aa</td></tr>
+                    <tr><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td></tr>
+                    <tr><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td></tr>
+                    <tr><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td></tr>
+                    -->
+                </table>
+            </div>
+            
+            <br>
+                <!--<a href='#' onclick="intel.xdk.device.launchExternal('http://kipkar.solucionesoftware.com.mx/sincronizacion/pdf-orden-servicio?idOrden=69');">pdf</a>-->
+                <!--<iframe height="2000" width="2000" src="http://kipkar.solucionesoftware.com.mx/sincronizacion/pdf-orden-servicio?idOrden=69"></iframe>-->
+                <div id="lnkImprimir" onclick="imprimirFactura();" class="col-xs-12 paddingBottom20px" style="display:none;">
+                    <button class="buttonRight button button-fill color-cyan">
+                        <i class="fa fa-print"></i>&nbsp;Imprimir
+                    </button>
+                </div>
+            <br>
+            <table class="encabezadoTableBlue table table-stripped sinMargin sinPadding col-xs-12" border="1" >
+                <thead>
+                    <tr>
+                        <th class="col-xs-2">Fecha</th>
+                        <th class="col-xs-1">Kilometraje</th>
+                        <th class="col-xs-1">Precio</th>
+                        <th class="col-xs-3">Servicio</th>
+                        <th class="col-xs-3">Operaciones</th>
+                        <th class="col-xs-2">Refacciones</th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="scrollableDivOperaciones">
+                <table id="gridOrde" class="cuerpoTableBlue table table-stripped sinMargin" border="1" width="100%">
+                    <!--
+                        <tr><td class="col-xs-2">aa</td><td class="col-xs-2">aa</td><td class="col-xs-2">aa</td><td class="col-xs-2">aa</td><td class="col-xs-2">aa</td><td class="col-xs-2">aa</td></tr>
+                        <tr><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td></tr>
+                        <tr><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td></tr>
+                        <tr><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td><td>aa</td></tr>
+                    -->
+                </table>
+            </div>
+            <br>
+            
+            
+            
+            <div id="cnvAltas" class="col-xs-7 cornerTopRadius fondo-rojo hauto" style="padding: 10px 0px;">
+            <div class="col-xs-12 fondo-rojo hauto"><h1>Alta / Edición</h1></div>
+                <div class="col-xs-12 sinPaddingLateral">
+                    <div class="col-xs-3">
+                        <input type="text" class="w100 form-control placas" placeholder="Placas" disabled="disabled">
+                    </div>
+                    
+                    <div class="col-xs-4">
+                        <input type="text" class="w100 form-control noSerie" placeholder="No. serie" disabled="disabled">
+                    </div>
+                    <div class="col-xs-5 pull-right sinPaddingLateral">
+                        <div class="col-xs-6">
+                             <input type="button" id="btnEditarAutomovil" class="marginTop2px button button-fill color-cyan"  value="Editar" />
+                        </div>
+
+                        <div class="col-xs-6">
+                            <input type="button" id="btnAgregarAutomovil" class="marginTop2px button button-fill color-green" value="Agregar" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 paddingTop5px sinPaddingLateral">
+                    <div class="col-xs-4 ">
+                        <input type="text" class="form-control ano"  placeholder="Año" disabled="disabled">
+                    </div>
+                    <div class="col-xs-4 ">
+                        <input type="text" class="form-control marca" placeholder="Marca" disabled="disabled">
+                    </div>
+                    <div class="col-xs-4 ">
+                       <input type="text" class="form-control kilometraje" placeholder="Kilometraje" disabled="disabled">
+                    </div>
+                </div>
+                <div class="col-xs-12 paddingTop5px sinPaddingLateral">
+                    <div class="col-xs-6 ">
+                        <input type="text" class="form-control modelo"  placeholder="Modelo" disabled="disabled">
+                    </div>
+                    <div class="col-xs-6 ">
+                        <input type="text" class="form-control motor" placeholder="Motor" disabled="disabled">
+                    </div>
+                </div>
+                <hr>
+                <div id="p">
+                <div  class="col-xs-12 paddingTop5px sinPaddingLateral">
+                    <div class="col-xs-3 ">
+                        <input type="hidden" value="" id="idPropietario">
+                        <select id="idPersonaTipo" class="form-control idPersonaTipo" disabled="disabled">
+                            <option value="">- Seleccione un tipo -</option>
+                        </select>
+                        <!--<input type="text" class="form-control"   placeholder="Tipo persona" id="personaTipo">-->
+                    </div>
+                    <div class="col-xs-4 ">
+                        <input type="text" class="form-control" placeholder="Rfc" id="rfc" disabled="disabled">
+                    </div>
+                    <div class="col-xs-5 pull-right">
+                        <div class="col-xs-6">
+                             <input type="button" id="btnEditarPropietario" class="marginTop2px button button-fill color-cyan" value="Editar"/>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <input type="button" id="btnAgregarPropietario" class="marginTop2px button button-fill color-green" value="Agregar"/>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 paddingTop5px sinPaddingLateral">
+                    <div class="col-xs-12 ">
+                        <input type="text" class="form-control"   placeholder="Nombre" id="nombre" disabled="disabled">
+                    </div>
+                </div>
+                <div class="col-xs-12 paddingTop5px sinPaddingLateral">
+                    <div class="col-xs-8 ">
+                        <input type="text" class="form-control"   placeholder="Calle y número" id="domicilio" disabled="disabled">
+                    </div>
+                    <div class="col-xs-4 pull-right">
+                        <input type="text"  class="form-control"  placeholder="Código postal" id="codigoPostal" maxlength="5" disabled="disabled">
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 paddingTop5px sinPaddingLateral">
+                    <div class="col-xs-6 ">
+                        <select id="idEstado" class="form-control" disabled="disabled">
+                            <option value="">- Seleccione un Estado -</option>
+                        </select>
+                        <!--<input type="text" class="form-control"   placeholder="Estado" id="estado">-->
+                    </div>
+                    <div class="col-xs-6 ">
+                        <select id="idMunicipio" class="form-control" disabled="disabled">
+                            <option value="">- Seleccione un Municipio -</option>
+                        </select>
+                         <!--<input type="text" class="form-control" placeholder="Municipio" id="municipio">-->
+                    </div>
+                </div>
+                <div class="col-xs-12 paddingTop5px sinPaddingLateral">
+                    <div class="col-xs-12 ">
+                        <select id="idCiudad" class="form-control" disabled="disabled">
+                            <option value="">- Seleccione una Ciudad -</option>
+                        </select>
+                        <!--<input type="text" class="form-control"  placeholder="Ciudad" id="ciudad">-->
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 paddingTop5px sinPaddingLateral">
+                    <div class="col-xs-3 ">
+                        <select id="idTelefonoTipo1" class="form-control" disabled="disabled">
+                            <option value="" >- Seleccione un tipo de télefono -</option>
+                        </select>
+                        <!--<input type="text" class="form-control"   placeholder="Tipo teléfono" id="telefonoTipo1">-->
+                    </div>
+                    <div class="col-xs-2 ">
+                        <input type="text" class="form-control"   placeholder="Lada" id="lada1" disabled="disabled">
+                    </div>
+                    <div class="col-xs-5 ">
+                        <input type="text" class="form-control"   placeholder="Teléfono" id="telefono1" disabled="disabled">
+                    </div>
+                    <div class="col-xs-2 ">
+                        <input type="text" class="form-control" placeholder="Extensión" id="extension1" disabled="disabled">
+                    </div>
+                </div>
+                <div class="col-xs-12 paddingTop5px sinPaddingLateral">
+                    <div class="col-xs-3 ">
+                        <select id="idTelefonoTipo2" class="form-control" disabled="disabled">
+                            <option value="">- Seleccione un tipo de télefono -</option>
+                        </select>
+                        <!--<input type="text" class="form-control"   placeholder="Tipo teléfono" id="telefonoTipo2">-->
+                    </div>
+                    <div class="col-xs-2 ">
+                        <input type="text" class="form-control"   placeholder="Lada" id="lada2" disabled="disabled">
+                    </div>
+                    <div class="col-xs-5 ">
+                        <input type="text" class="form-control"   placeholder="Teléfono" id="telefono2" disabled="disabled">
+                    </div>
+                    <div class="col-xs-2 ">
+                        <input type="text" class="form-control" placeholder="Extensión" id="extension2" disabled="disabled">
+                    </div>
+                </div>
+                <div class="col-xs-12 paddingTop5px sinPaddingLateral">
+                    <div class="col-xs-12 ">
+                        <input type="text" class="form-control"   placeholder="Correo electrónico" id="email" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+                </div>
+            
+            
+            
+            <div class="col-xs-4 col-xs-offset-1 cornerTopRadius fondo-gris hauto" style="padding: 10px 0px;">
+            <div class="col-xs-12 fondo-gris  hauto"><h1>Información</h1></div>
+                    <div class="col-xs-12">
+                        <input id="folio" type="text" class="form-control" placeholder="Folio" readonly="readonly">
+                    </div>
+                    
+                    <div class="col-xs-12 paddingTop5px">
+                        <input type="hidden" id="idUsuario"  value="">
+                        <input id="asesor" type="text" class="form-control" placeholder="Asesor" readonly="readonly">
+                    </div>
+                
+                    <div class="col-xs-12 paddingTop5px">
+                        <input id="sucursal" type="text" class="form-control" placeholder="Sucursal" readonly="readonly">
+                    </div>
+                    
+                    <div class="col-xs-12 paddingTop5px">
+                        <input id="ingreso" type="text" class="form-control" placeholder="Fecha y hora de Ingreso" readonly="readonly" onchange="inicio.actualizarFechaEntrega(this)">
+                    </div>
+                    
+                    <div class="col-xs-12 paddingTop5px">          
+                        <!--<div class="input-group date calendario">-->
+                            <input id="entrega" type="date" class="form-control" placeholder="Fecha de Promesa de entrega" onblur="inicio.actualizarFechaPromesa(this);" style="width:100%;" /><!-- readonly="readonly" -->
+                            <!--<span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>-->
+                        <!--</div>-->
+                    </div>
+                    <div class="col-xs-12 paddingTop5px">          
+                        <input id="entregaTiempo" type="time" class="form-control" placeholder="Hora de Promesa de entrega" onblur="inicio.actualizarFechaPromesa(this);" style="width:100%;" />
+                    </div>
+                
+                    <div class="col-xs-12 paddingTop5px">
+                        <select id="noBahia" class="form-control" placeholder="Bahia" onchange="inicio.actualizarBahia(this)">
+                            <option value="">- Seleccione la Bahía -</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-12 paddingTop5px">
+                        <img src="imagenes/logo-fondo-blanco.png" class="w100">
+                    </div>
+                    <div class="col-xs-12 paddingTop5px">
+                        <input type="button" onclick="inicio.btnLimpiar()" class="form-control button button-fill color-green" value="Limpiar">
+                    </div>
+            </div>            
+        </div>
+
+    </div>
+</body>
+</html>
