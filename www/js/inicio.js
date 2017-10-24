@@ -1,7 +1,11 @@
 var inicio={};
 var agreAuto="";
 var recargaPagina = true;
-var noBorrarFechaEntrega=false;
+var noBorrarFehaEntrega=false;
+
+inicio.pagiActu=0;
+inicio.pagiTota=0;
+
 $(document).ready(function(){
     document.addEventListener("deviceready",function(){
         informacionUsuario = almacenamiento.dameUsuario();
@@ -586,8 +590,22 @@ function LimpiarFiltros(){
         inicio.dameAutos();
 }
 inicio.cargAuto=false;
+
+inicio.siguPagi=function(){
+    if(inicio.pagiActu < inicio.pagiTota-1){
+        inicio.pagiActu++;
+        inicio.dameAutos();
+    }//if
+}//function
+
+inicio.antePagi=function(){
+    if(inicio.pagiActu > 0){
+        inicio.pagiActu--;
+        inicio.dameAutos();
+    }//if
+}//function
+
 inicio.dameAutos=function(modoConsulta){
-    
     if(modoConsulta!=undefined && modoConsulta=='1'){
         almacenamiento.modoConsulta();
          $("#gridOrde").html('').append('<tr><td>Seleccione un Automovil para cargar las ordenes de servicio...</td></tr>');
@@ -603,7 +621,7 @@ inicio.dameAutos=function(modoConsulta){
     //alert($("#txtTelefono").val());
     var clav=clave();
     $.ajax({
-		url:      dominio+"busca-auto-propietario",
+		url:      dominio+"busca-auto-propietario-con-paginacion",
 		type:     'POST',
         dataType: "json",
 		data:	{
@@ -615,14 +633,25 @@ inicio.dameAutos=function(modoConsulta){
 			nombre:    $("#txtCliente").val(),
 			telefono:  $("#txtTelefono").val(),
             email:     $("#txtEmail").val(),
-            idSucursal: informacionUsuario.idSucursal
+            idSucursal: informacionUsuario.idSucursal,
+            pagiActu:  inicio.pagiActu,
+            pagiTota:  inicio.pagiTota
 		},
         processData:true,
 		success:	function(re){
+            //Console.log(re);
+            var temp=re[0];
+            inicio.pagiActu=temp["pagiActu"];
+            inicio.pagiTota=temp["pagiTota"];
+            //alert(inicio.pagiActu+","+inicio.pagiTota);
+            $("#lblPagina").html("Página: "+(parseInt(inicio.pagiActu)+1)+" de "+parseInt(inicio.pagiTota));
+            re=re[1];
             inicio.cargAuto=false;
             if(re.length==0 || re[0].error==""){
                 var co="";
                 for(var i=0; i<=re.length-1; i++){
+                    if(re[i]["folio"]==inicio.seleAutoIdOrden)
+                        $("#ingreso").val(hoy());
                     co+="<tr class='rengAuto' "+(re[i]["folio"]==inicio.seleAutoIdOrden?"style='background:#FF0000;'":"")+" id='rengAuto"+re[i]["folio"]+"' onClick=\"inicio.seleccionoAuto('"+re[i]["idAutomovil"]+"','"+re[i]["folio"]+"','"+re[i]["ingreso"]+"','"+re[i]["entrega"]+"','"+re[i]["noBahia"]+"','"+re[i]["idOrden"]+"','"+re[i]["idEstatus"]+"');\">";
                     co+=" <td class='col-x s-1' width='10%'>"+quitaNull(re[i]["folio"])+"</td>";
                     co+=" <td class='col-x s-1 text-12' width='8%'>"+quitaNull(re[i]["fecha"])+"</td>";
@@ -1524,7 +1553,15 @@ inicio.obtenerMotores=function(){
 		success: function(re){
             var idMode=$("#motor").val();
             $("#motor").html(re);
-            $("#motor").val(idMode);
+            var cbo=$("#motor")[0];
+            //$("#motor").val(idMode);
+            for(var i=0; i<=cbo.options.length-1; i++){
+                //alert(cbo.options[i].value+" "+idMode);
+                if(cbo.options[i].value.toUpperCase() == idMode.toLocaleUpperCase()){
+                    cbo.options[i].selected=true;
+                    break;
+                }//if
+            }//for
         },
 		error: function(re){
 			alert("Error al comunicarse con servidor.");

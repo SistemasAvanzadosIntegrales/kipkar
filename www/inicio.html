@@ -119,9 +119,14 @@
             </div>
             <div class="list-block lineal">
                 <ul>
-                    <li class="col-xs-2 sinPadding col-xs-offset-2">
+                <li class="col-xs-2 sinPadding" style="text-align:left;">
+                    <div class="acomodoBtnFiltrado">
+                        <button onClick='inicio.antePagi();'>&lt;</button>
+                    </div>
+                </li>
+                    <li class="col-xs-2 sinPadding">
                       <div class="acomodoBtnFiltrado">
-                        <button class="col-xs-12 button button-fill color-cyan sinMargin sinPadding" onClick="inicio.dameAutos();">
+                        <button class="col-xs-12 button button-fill color-cyan sinMargin sinPadding" onClick="inicio.pagiActu=0; inicio.dameAutos();">
                             <i class="fa fa-search"></i>&nbsp;Buscar
                         </button>
                       </div>
@@ -140,10 +145,18 @@
                         </button>
                       </div>
                 </li>
+                <li class="col-xs-2 sinPadding" style="text-align:right;">
+                    <div class="acomodoBtnFiltrado">
+                        <button onClick='inicio.siguPagi();'>&gt;</button>
+                    </div>
+                </li>
                 </ul>
             </div>
             <hr class="col-xs-12 sinPadding" style="clear:both;">
             <br>
+            <table class="sinMargin sinPadding col-xs-12">
+                <tr><td><label id="lblPagina">Página:</label></td></tr>
+            </table>
             <table class="encabezadoTableBlack table table-stripped sinMargin sinPadding col-xs-12 text-13" border="1" >
                 <thead>
                     <tr>

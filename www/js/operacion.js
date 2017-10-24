@@ -159,7 +159,7 @@ operacion.obtenerServicios=function(){
                         //obtenemos las operaciones de la orden ligada
                         var clav=clave();
                         $.ajax({
-                            url:      dominio+"dame-operaciones-orden",
+                            url:      dominio+"dame-operaciones-orden2",
                             type:     'POST',
                             dataType: "json",
                             data:	{
@@ -1042,7 +1042,7 @@ operacion.obtenerProductosAno=function(){
     $("#idRefaccion").html("<option val=''>Cargando...Refacción</option>");
     //alert("obtener-refacciones/idAno/"+idAnoo+"/idMarca/"+idMarc+"/idModelo/"+idMode);
     $.ajax({
-		url:  dominioServicios+"obtener-refacciones/idAno/"+idAnoo+"/idMarca/"+idMarc+"/idModelo/"+idMode,
+		url:  dominioServicios+"obtener-refacciones2/idAno/"+idAnoo+"/idMarca/"+idMarc+"/idModelo/"+idMode,
 		type: 'POST',
 		data: {
 		},
@@ -1060,7 +1060,7 @@ operacion.guardarOperacionDesdeApp=function(){
     var refaTemp=almacenamiento.obtenerRefaccion(idRefaReng);
     //alert(refaTemp.idOperacion+","+idCant+","+idNomb+","+idPrec+","+refaTemp.tipo+","+idRefa);
     $.ajax({
-        url:  dominioServicios+"guardar-refaccion-desde-app",
+        url:  dominioServicios+"guardar-refaccion-desde-app2",
         type: 'POST',
         data:	{
             'idOperacion': refaTemp.idOperacion,
@@ -1118,7 +1118,7 @@ operacion.buscarNpc=function(){
     //alert("Buscar npc");
     $("#idRefaccion").html("<option val=''>Cargando... refacción</option>");
     $.ajax({
-        url:  dominioServicios+"buscar-refaccion-por-npc/npc/"+$("#txtBuscarNpc").val(),
+        url:  dominioServicios+"buscar-refaccion-por-npc2/npc/"+$("#txtBuscarNpc").val(),
         type: 'POST',
         data:	{
         },
@@ -1238,7 +1238,7 @@ operacion.obtenerSubgeneros=function(){
 operacion.obtenerProductos=function(){
     idSubg=$("#idSubgenero").val();
     $.ajax({
-		url:  dominioServicios+"obtener-productos/idSubgenero/"+$("#idSubgenero").val(),
+		url:  dominioServicios+"obtener-productos2/idSubgenero/"+$("#idSubgenero").val(),
 		type: 'POST',
 		data: {
 		},
