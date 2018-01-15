@@ -666,7 +666,7 @@ inicio.dameAutos=function(modoConsulta){
                     co+="</tr>";
                 }//for
                 
-                if(co==""){
+                if(co=="" && !($("#txtPlacas").val()=="" && $("#txtFolio").val()=="" && $("#txtNoSerie").val()=="" && $("#txtCliente").val()=="" && $("#txtTelefono").val()=="" &&$("#txtEmail").val()=="")){
                     inicio.dameAutosPropietarios();
                 }//if
                 
